@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
@@ -24,39 +26,40 @@ public class PDFParser {
 		extractor.setCustomFormats(DateExtractor.EXCEL_FORMATS);
 	}
 	
-	public static void parseDiretory(Path p) throws IOException {
-		for (val f : Seq.seq(Files.walk(p)).filter(Files::isRegularFile).filter($ -> $.toString().endsWith(".pdf"))) {
-			try {
-				parse(f);
-			} catch (IOException e) {
-				log.warn("Error parsing {}: {}", p, Utilities.getMessage(e));
-			}
-		}
+	public static List<PDFDate> parseDiretory(Path p) throws IOException {
+		return Seq.seq(Files.walk(p))
+			.filter(Files::isRegularFile)
+			.filter($ -> $.toString().endsWith(".pdf"))
+			.flatMap($ -> {
+				try {
+					return Seq.seq(parse($));
+				} catch (IOException e) {
+					log.warn("Error parsing {}: {}", $, Utilities.getMessage(e));
+					return Seq.empty();
+				}
+			}).toList();
 	}
 	
-	public static void parse(Path p) throws IOException {
+	public static List<PDFDate> parse(Path p) throws IOException {
 		log.info("Parsing {}...", p);
+		val ret = new LinkedList<PDFDate>();
 		val ts = new PDFTextStripper();
 		try (val pdf = PDDocument.load(p.toFile())) {
 
 			for (var i = 1; i <= pdf.getNumberOfPages(); i++) {
 				val out = new StringWriter();
-				
 				ts.setStartPage(i);
 				ts.setEndPage(i);
 				ts.writeText(pdf, out);
-				
 				val pageText = out.toString();
+				
 				val dates = extractor.extractAll(pageText);
-				
 				for (val date : dates) {
-					log.info("Page {} date {} context {}[{}]{}", i, date.getMatch(),
-						date.getContextBefore(), date.getMatchText(), date.getContextAfter());
+					ret.add(PDFDate.of(p, i, date));
 				}
-				
 				i++;
 			}
 		}
-		
+		return ret;
 	}
 }
