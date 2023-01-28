@@ -20,6 +20,11 @@
 		</repository>
 	</repositories>
 
+	<properties>
+		<application.mainClass>com.github.jdimeo.pdfsheet.PDFSheet</application.mainClass>
+		<application.headerType>console</application.headerType>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>com.elderresearch.commons-jvm</groupId>
@@ -37,4 +42,16 @@
     		<version>2.0.27</version>
 		</dependency>
 	</dependencies>
+	
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-shade-plugin</artifactId>
+			</plugin>
+			<plugin>
+			    <groupId>com.akathist.maven.plugins.launch4j</groupId>
+			    <artifactId>launch4j-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
 </project>
