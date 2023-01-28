@@ -13,6 +13,10 @@
 	<artifactId>pdf-spreadsheet</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
+	<name>PDF Spreadsheet</name>
+	<description>Parse a directory of PDFs and create a spreadsheet summarizing them</description>
+	<organization><name>John Dimeo</name></organization>
+
 	<repositories>
 		<repository>
 			<id>jitpack.io</id>
