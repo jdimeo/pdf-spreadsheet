@@ -11,7 +11,7 @@
 
 	<groupId>com.github.jdimeo</groupId>
 	<artifactId>pdf-spreadsheet</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 
 	<name>PDF Spreadsheet</name>
 	<description>Parse a directory of PDFs and create a spreadsheet summarizing them</description>
