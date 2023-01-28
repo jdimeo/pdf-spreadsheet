@@ -27,6 +27,8 @@
 	<properties>
 		<application.mainClass>com.github.jdimeo.pdfsheet.PDFSheet</application.mainClass>
 		<application.headerType>console</application.headerType>
+		<application.file>pdf-spreadsheet</application.file>
+		<application.iconWin>doc/logo.ico</application.iconWin>
 	</properties>
 
 	<dependencies>
