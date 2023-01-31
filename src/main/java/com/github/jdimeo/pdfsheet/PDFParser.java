@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.jooq.lambda.Seq;
@@ -29,7 +30,7 @@ public class PDFParser {
 	public static List<PDFDate> parseDiretory(Path p) throws IOException {
 		return Seq.seq(Files.walk(p))
 			.filter(Files::isRegularFile)
-			.filter($ -> $.toString().endsWith(".pdf"))
+			.filter($ -> StringUtils.endsWithIgnoreCase($.toString(), ".pdf"))
 			.flatMap($ -> {
 				try {
 					return Seq.seq(parse($));
